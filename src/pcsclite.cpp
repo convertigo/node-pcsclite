@@ -68,14 +68,16 @@ postServiceCheck:
 #endif // _WIN32
 
     LONG result;
+    int _count = 100;
     // TODO: consider removing this do-while Windows workaround that should not be needed anymore
     do {
         // TODO: make dwScope (now hard-coded to SCARD_SCOPE_SYSTEM) customisable
+        _count--;
         result = SCardEstablishContext(SCARD_SCOPE_SYSTEM,
                                             NULL,
                                             NULL,
                                             &m_card_context);
-    } while(result == SCARD_E_NO_SERVICE || result == SCARD_E_SERVICE_STOPPED);
+    } while((result == SCARD_E_NO_SERVICE || result == SCARD_E_SERVICE_STOPPED) && _count > 0);
     if (result != SCARD_S_SUCCESS) {
         Nan::ThrowError(error_msg("SCardEstablishContext", result).c_str());
     } else {
