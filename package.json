@@ -43,7 +43,6 @@
     "index.d.ts"
   ],
   "scripts": {
-    "install": "node-gyp rebuild",
     "test": "mocha --exit"
   },
   "dependencies": {
