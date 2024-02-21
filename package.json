@@ -1,6 +1,6 @@
 {
   "name": "@pokusew/pcsclite",
-  "version": "0.6.0",
+  "version": "0.6.0-conv5",
   "description": "Bindings over PC/SC to access Smart Cards",
   "keywords": [
     "nfc",
@@ -43,6 +43,7 @@
     "index.d.ts"
   ],
   "scripts": {
+    "install": "echo \"Skipping node-gyp rebuild\"",
     "test": "mocha --exit"
   },
   "dependencies": {
