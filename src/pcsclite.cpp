@@ -71,9 +71,9 @@ postServiceCheck:
     int _count = 100;
     // TODO: consider removing this do-while Windows workaround that should not be needed anymore
     do {
-        // TODO: make dwScope (now hard-coded to SCARD_SCOPE_SYSTEM) customisable
+        // TODO: make dwScope (now hard-coded to SCARD_SCOPE_USER) customisable
         _count--;
-        result = SCardEstablishContext(SCARD_SCOPE_SYSTEM,
+        result = SCardEstablishContext(SCARD_SCOPE_USER,
                                             NULL,
                                             NULL,
                                             &m_card_context);
@@ -342,7 +342,7 @@ LONG PCSCLite::get_card_readers(PCSCLite* pcsclite, AsyncResult* async_result) {
 #endif
         if (result == SCARD_E_NO_SERVICE || result == SCARD_E_SERVICE_STOPPED) {
             SCardReleaseContext(pcsclite->m_card_context);
-            SCardEstablishContext(SCARD_SCOPE_SYSTEM, NULL, NULL, &pcsclite->m_card_context);
+            SCardEstablishContext(SCARD_SCOPE_USER, NULL, NULL, &pcsclite->m_card_context);
             result = get_card_readers(pcsclite, async_result);
         }
     } else {
