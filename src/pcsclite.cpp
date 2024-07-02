@@ -31,42 +31,6 @@ PCSCLite::PCSCLite(): m_card_context(0),
     assert(uv_mutex_init(&m_mutex) == 0);
     assert(uv_cond_init(&m_cond) == 0);
 
-    // TODO: consider removing this Windows workaround that should not be needed anymore
-#ifdef _WIN32
-    HKEY hKey;
-    DWORD startStatus, datacb = sizeof(DWORD);
-    LONG _res;
-    _res = RegOpenKeyEx(HKEY_LOCAL_MACHINE, "System\\CurrentControlSet\\Services\\SCardSvr", 0, KEY_READ, &hKey);
-    if (_res != ERROR_SUCCESS) {
-        printf("Reg Open Key exited with %d\n", _res);
-        goto postServiceCheck;
-    }
-    _res = RegQueryValueEx(hKey, "Start", NULL, NULL, (LPBYTE)&startStatus, &datacb);
-    if (_res != ERROR_SUCCESS) {
-        printf("Reg Query Value exited with %d\n", _res);
-        goto postServiceCheck;
-    }
-    if (startStatus != 2) {
-        SHELLEXECUTEINFO seInfo = {0};
-        seInfo.cbSize = sizeof(SHELLEXECUTEINFO);
-        seInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
-        seInfo.hwnd = NULL;
-        seInfo.lpVerb = "runas";
-        seInfo.lpFile = "sc.exe";
-        seInfo.lpParameters = "config SCardSvr start=auto";
-        seInfo.lpDirectory = NULL;
-        seInfo.nShow = SW_SHOWNORMAL;
-        seInfo.hInstApp = NULL;
-        if (!ShellExecuteEx(&seInfo)) {
-            printf("Shell Execute failed with %d\n", GetLastError());
-            goto postServiceCheck;
-        }
-        WaitForSingleObject(seInfo.hProcess, INFINITE);
-        CloseHandle(seInfo.hProcess);
-    }
-postServiceCheck:
-#endif // _WIN32
-
     LONG result;
     int _count = 100;
     // TODO: consider removing this do-while Windows workaround that should not be needed anymore
