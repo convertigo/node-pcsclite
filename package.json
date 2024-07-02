@@ -1,6 +1,6 @@
 {
   "name": "@pokusew/pcsclite",
-  "version": "0.6.0-conv7",
+  "version": "0.6.0-conv8",
   "description": "Bindings over PC/SC to access Smart Cards",
   "keywords": [
     "nfc",
